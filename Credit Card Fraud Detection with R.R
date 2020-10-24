@@ -1,8 +1,12 @@
-#Data Science Project – Detect Credit Card Fraud with Machine Learning in R
+#Detect Credit Card Fraud with Machine Learning in R
 
+#Import Required Library
 library(ranger)
 library(caret)
 library(data.table)
+
+#Load Dataset:
+
 creditcard_data <- read.csv(file.choose()
 creditcard_data
 
@@ -10,12 +14,15 @@ creditcard_data
 #2. Data Exploration
 
 dim(creditcard_data)
+
 #Top 6 rows along with header name
 head(creditcard_data,6)
+
 # Last 6 rows along with header name
 tail(creditcard_data,6)
 
 #Let's check the summary and structure of the dataset
+
 table(creditcard_data$Class)
 summary(creditcard_data$Amount)
 names(creditcard_data)
@@ -27,14 +34,15 @@ ncol(creditcard_data)
 
 sd(creditcard_data$Amount)
 
-#3. Data Manipulation
+
+#Data Manipulation
 
 head(creditcard_data)
 creditcard_data$Amount=scale(creditcard_data$Amount)
 NewData=creditcard_data[,-c(1)]
 head(NewData)
 
-#4. Data Modeling
+#Data Modeling
 
 library(caTools)
 set.seed(123)
@@ -44,7 +52,7 @@ test_data = subset(NewData,data_sample==FALSE)
 dim(train_data)
 dim(test_data)
 
-#5. Fitting Logistic Regression Model
+#Fitting Logistic Regression Model
 
 Logistic_Model=glm(Class~.,test_data,family=binomial())
 summary(Logistic_Model)
@@ -60,7 +68,7 @@ library(pROC)
 lr.predict <- predict(Logistic_Model,train_data, probability = TRUE)
 auc.gbm = roc(test_data$Class, lr.predict, plot = TRUE, col = "blue")
 
-#6. Fitting a Decision Tree Model
+#Fitting a Decision Tree Model
 
 library(rpart)
 library(rpart.plot)
@@ -69,7 +77,7 @@ predicted_val <- predict(decisionTree_model, creditcard_data, type = 'class')
 probability <- predict(decisionTree_model, creditcard_data, type = 'prob')
 rpart.plot(decisionTree_model)
 
-#8. Gradient Boosting (GBM)
+#Gradient Boosting (GBM)
 
 library(gbm, quietly=TRUE)
 # Get the time to train the GBM model
